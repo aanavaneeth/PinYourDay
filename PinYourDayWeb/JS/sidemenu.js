@@ -16,10 +16,40 @@
             document.querySelector("core-scaffold div[data-menuassociation='"+ id+"']").style.display = "block";
         },false);
     });
-   var calendarList =  document.getElementsByTagName("paper-calendar");
+   var calendarList =  document.getElementsByTagName("responsive-calendar");
     Array.prototype.slice.call(calendarList, 0).forEach(function (calendar) {
         calendar.addEventListener("date-selected", function(evt) {
-            console.log(evt.detail);
-        })
+            //console.log(evt.detail.format('MMMM'));
+            var year = evt.detail.format('YYYY').toString(),
+                month = evt.detail.format('MMMM').toString(),
+                day = evt.detail.format('D');
+           localforage.getItem("mark")
+               .then(function(data){
+                   if(!data){
+                       var data = {};
+                       data[year] = {};
+                       data[year][month] = [day];
+                       console.log(data);
+                       return localforage.setItem("mark", data);
+                   }
+               if(!data[year] && !data[year][month]){
+                   data[year][month] = [];
+               }
+                   addOrRemove(data[year][month],day);
+                   console.log(data);
+                   return localforage.setItem("mark", data);
+               }, function(err){
+                   console.log(err);
+               }).then(function(){
+               });
+        });
     });
+    function addOrRemove(array, value) {
+        var index = array.indexOf(value);
+        if (index === -1) {
+            array.push(value);
+        } else {
+            array.splice(index, 1);
+        }
+    }
 })();

@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <title>Side menu</title>
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <script src="bower_components/localforage/dist/localforage.min.js"></script>
     <script src="./bower_components/webcomponentsjs/webcomponents.min.js"></script>
-    <link rel="stylesheet" href="CSS/sidemenu.css"/>
     <!-- List of components -->
     <link rel="import" href="./bower_components/font-roboto/roboto.html">
     <link rel="import" href="./bower_components/core-scaffold/core-scaffold.html">
@@ -14,8 +14,8 @@
     <link rel="import" href="./bower_components/core-menu/core-menu.html">
     <link rel="import" href="./bower_components/core-item/core-item.html">
     <link rel="import" href="./bower_components/paper-button/paper-button.html">
-    <link rel="import" href="paper-calendar.html">
-    <link rel="import" href="./bower_components/calendar-day-button/calendar-day-button.html">
+    <link rel="import" href="responsive-calendar.html">
+    <link rel="stylesheet" href="CSS/sidemenu.css"/>
     <!--End of list of components -->
     <style shim-shadowdom>
         core-scaffold::shadow core-toolbar {
@@ -39,14 +39,13 @@
     </core-header-panel>
     <section tool>Pin Your Day</section>
     <div data-menuassociation = "item1">
-        <paper-calendar></paper-calendar>
-    <calendar-day-button id="helbutton" class="blue-ripple">hello</calendar-day-button>
+        <responsive-calendar></responsive-calendar>
     </div>
     <div data-menuassociation = "item2" style="display: none"><paper-calendar></paper-calendar></div>
 </core-scaffold>
 <script src = "./JS/sidemenu.js"></script>
 <script>
-document.getElementById("helbutton").addEventListener("click", function(){}, false);
+
 </script>
 </body>
 </html>
