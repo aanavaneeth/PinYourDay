@@ -45,7 +45,8 @@ Polymer({
   ready: function() {
     this.now = moment();
     this.view = 'Days';
-    this.item  = this.now.format('D')+"-" + this.now.format('MM')+ "-"+this.now.format('YYYY');
+    //this.item  = this.now.format('D')+"-" + this.now.format('MM')+ "-"+this.now.format('YYYY');
+    this.currentDate  = this.now.format('D')+"-" + this.now.format('MM')+ "-"+this.now.format('YYYY');
     //this.canFireEvent = true; //no need to fire event on load for our app!
     this.updateDate();
   },
@@ -103,6 +104,8 @@ Polymer({
     this[currentView] = el.dataset.value;
     this.prevView();
     this.item = el.dataset.value;
+    //this.currentDate = el.dataset.value;
+
   },
 
   render: function() {

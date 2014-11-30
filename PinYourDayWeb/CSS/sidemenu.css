@@ -17,6 +17,12 @@ core-scaffold core-toolbar {
     color: #FFFFFF;
 }
 
+responsive-calendar::shadow #content paper-button.days.currentDate{
+color: #9c27b0;
+}
+responsive-calendar::shadow #content paper-button.days.core-selected{
+    color: #F50057 !important;
+}
 
 @media (min-width: 1100px){
 

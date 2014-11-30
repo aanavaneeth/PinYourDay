@@ -28,7 +28,7 @@ tested on Chrome & Firefox 33
           <paper-icon-button icon="arrow-forward" on-click="{{ next }}"></paper-icon-button>
         </core-toolbar>
         <core-selector multi selected = "{{selectionList}}" valueattr="data-value"  target="{{$.content}}" itemsSelector=".active,.fade" selectedAttribute=""></core-selector>
-        <!--selected="{{ item }}"-->
+        <core-selector notap selected = "{{currentDate}}" valueattr="data-value" selectedClass="currentDate"  target="{{$.content}}" itemsSelector=".active" selectedAttribute=""></core-selector>
         <div id="content">
           <!--horizontal layout wrap justified-->
           <template id="days" repeat="{{ item in items }}">
