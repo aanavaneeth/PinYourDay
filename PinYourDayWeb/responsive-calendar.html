@@ -9,7 +9,6 @@
 
 <script src="./bower_components/moment/moment.js"></script>
 <script src="./bower_components/moment-range/lib/moment-range.js"></script>
-
 <!--
 
   <paper-calendar></paper-calendar>
@@ -28,7 +27,8 @@ tested on Chrome & Firefox 33
           </paper-button>
           <paper-icon-button icon="arrow-forward" on-click="{{ next }}"></paper-icon-button>
         </core-toolbar>
-        <core-selector valueattr="data-value" selected="{{ item }}" target="{{$.content}}" itemsSelector=".active" selectedAttribute=""></core-selector>
+        <core-selector multi selected = "{{selectionList}}" valueattr="data-value"  target="{{$.content}}" itemsSelector=".active,.fade" selectedAttribute=""></core-selector>
+        <!--selected="{{ item }}"-->
         <div id="content">
           <!--horizontal layout wrap justified-->
           <template id="days" repeat="{{ item in items }}">

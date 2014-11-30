@@ -19,8 +19,7 @@
    var calendarList =  document.getElementsByTagName("responsive-calendar");
     Array.prototype.slice.call(calendarList, 0).forEach(function (calendar) {
         calendar.addEventListener("date-selected", function(evt) {
-            //console.log(evt.detail.format('MMMM'));
-            var year = evt.detail.format('YYYY').toString(),
+              var year = evt.detail.format('YYYY').toString(),
                 month = evt.detail.format('MMMM').toString(),
                 day = evt.detail.format('D');
            localforage.getItem("mark")
@@ -29,17 +28,17 @@
                        var data = {};
                        data[year] = {};
                        data[year][month] = [day];
-                       console.log(data);
                        return localforage.setItem("mark", data);
                    }
-               if(!data[year] && !data[year][month]){
+               if(!data[year]){
+                   data[year] = {}
+               }
+                   if( !data[year][month]){
                    data[year][month] = [];
                }
                    addOrRemove(data[year][month],day);
-                   console.log(data);
                    return localforage.setItem("mark", data);
                }, function(err){
-                   console.log(err);
                }).then(function(){
                });
         });

@@ -45,13 +45,13 @@ Polymer({
   ready: function() {
     this.now = moment();
     this.view = 'Days';
-    this.canFireEvent = true;
+    this.item  = this.now.format('D')+"-" + this.now.format('MM')+ "-"+this.now.format('YYYY');
+    //this.canFireEvent = true; //no need to fire event on load for our app!
     this.updateDate();
-    this.item  = this.day+ this.month+this.year;
   },
   observe: {
     date: 'updateNowDate',
-    now: 'updateInputDate',
+    item: 'updateInputDate',
     day: 'setNowDate',
     month: 'render',
     year: 'render',
@@ -96,15 +96,13 @@ Polymer({
   },
 
   setItem: function(e, d, el) {
-    var currentView;
-    if (el.className.indexOf('active') === -1) { return; }
-    currentView = this.views[this.view].item;
+    var currentView = this.views[this.view].item;
     if(currentView === "day"){
       this.canFireEvent = true;
     }
     this[currentView] = el.dataset.value;
     this.prevView();
-    this.item = this.day+ this.month+this.year;
+    this.item = el.dataset.value;
   },
 
   render: function() {
@@ -128,7 +126,7 @@ Polymer({
   updateInputDate: function() {
   if(this.canFireEvent) {
     this.canFireEvent = false;
-    this.fire("date-selected", this.now);
+    this.fire("date-selected", new moment(this.item, "DD-MM-YYYY"));
   }
   },
 
@@ -167,17 +165,27 @@ Polymer({
     var start = this.now.clone().startOf('month').day(0),
       end = this.now.clone().endOf('month').day(6),
       items = this.items = this.getDayNames(),
-      month = this.now.month();
-    this.type = 'days';
-    moment()
-      .range(start, end)
-      .by('days', function(moment) {
-        items.push({
-          val: moment.format('D')+moment.format('MMMM')+moment.format('YYYY'),
-          label: moment.format('D'),
-          cl: moment.month() === month ? 'active': 'fade'
-        });
-      });
+      month = this.now.month(), data, selection = [], that =  this;
+      this.selectionList = [];var selector = this.$.calendar.querySelector("core-selector");
+      this.type = 'days';
+    localforage.getItem("mark").then(function(markData){
+      data = markData;
+      moment()
+          .range(start, end)
+          .by('days', function(moment) {
+            var cls =  moment.month() === month ? 'active': 'fade';
+            if(data[moment.year()] && data[moment.year()][moment.format('MMMM')] && (data[moment.year()][moment.format('MMMM')].indexOf(moment.format('D'))) !== -1) {
+              selection.push( moment.format('D')+"-" + moment.format('MM')+ "-"+moment.format('YYYY'));
+            }
+            items.push({
+              val: moment.format('D')+"-" + moment.format('MM')+ "-"+moment.format('YYYY'),
+              label: moment.format('D'),
+              cl:cls
+            });
+          });
+      that.selectionList = selection;
+    });
+
   },
 
   setMonths: function() {
@@ -211,5 +219,6 @@ Polymer({
           cl: 'active'
         });
       });
-  }
+  },
+
 });
