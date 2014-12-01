@@ -39,7 +39,6 @@
                    addOrRemove(data[year][month],day);
                    return localforage.setItem("mark", data);
                }, function(err){
-               }).then(function(){
                });
         });
     });
