@@ -19,35 +19,9 @@
    var calendarList =  document.getElementsByTagName("responsive-calendar");
     Array.prototype.slice.call(calendarList, 0).forEach(function (calendar) {
         calendar.addEventListener("date-selected", function(evt) {
-              var year = evt.detail.format('YYYY').toString(),
-                month = evt.detail.format('MMMM').toString(),
-                day = evt.detail.format('D');
-           localforage.getItem("mark")
-               .then(function(data){
-                   if(!data){
-                       var data = {};
-                       data[year] = {};
-                       data[year][month] = [day];
-                       return localforage.setItem("mark", data);
-                   }
-               if(!data[year]){
-                   data[year] = {}
-               }
-                   if( !data[year][month]){
-                   data[year][month] = [];
-               }
-                   addOrRemove(data[year][month],day);
-                   return localforage.setItem("mark", data);
-               }, function(err){
-               });
+            var momentObj = evt.detail;
+            console.log(momentObj.format("DD-MM-YYYY"));
         });
     });
-    function addOrRemove(array, value) {
-        var index = array.indexOf(value);
-        if (index === -1) {
-            array.push(value);
-        } else {
-            array.splice(index, 1);
-        }
-    }
+
 })();

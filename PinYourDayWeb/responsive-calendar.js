@@ -45,14 +45,11 @@ Polymer({
   ready: function() {
     this.now = moment();
     this.view = 'Days';
-    //this.item  = this.now.format('D')+"-" + this.now.format('MM')+ "-"+this.now.format('YYYY');
     this.currentDate  = this.now.format('D')+"-" + this.now.format('MM')+ "-"+this.now.format('YYYY');
-    //this.canFireEvent = true; //no need to fire event on load for our app!
     this.updateDate();
   },
   observe: {
     date: 'updateNowDate',
-    item: 'updateInputDate',
     day: 'setNowDate',
     month: 'render',
     year: 'render',
@@ -96,16 +93,47 @@ Polymer({
     this.view = view || this.view;
   },
 
+  updateInputDate: function() {
+    var momentObj =  new moment(this.item, "DD-MM-YYYY"),
+        year =  momentObj.format('YYYY').toString(),
+        month = momentObj.format('MMMM').toString(),
+        day = momentObj.format('D'),
+        addOrRemove = function (arr, value) {
+          var index = arr.indexOf(value);
+          if (index === -1) {
+            arr.push(value);
+          } else {
+            arr.splice(index, 1);
+          }
+        };
+    localforage.getItem("mark")
+        .then(function(data){
+          if(!data){
+            var data = {};
+            data[year] = {};
+            data[year][month] = [day];
+            return localforage.setItem("mark", data);
+          }
+          if(!data[year]){
+            data[year] = {}
+          }
+          if( !data[year][month]){
+            data[year][month] = [];
+          }
+          addOrRemove(data[year][month],day);
+          return localforage.setItem("mark", data);
+        }, function(err){
+        });
+    this.fire("date-selected", momentObj);
+  },
   setItem: function(e, d, el) {
     var currentView = this.views[this.view].item;
-    if(currentView === "day"){
-      this.canFireEvent = true;
-    }
+    this.item = el.dataset.value;
     this[currentView] = el.dataset.value;
     this.prevView();
-    this.item = el.dataset.value;
-    //this.currentDate = el.dataset.value;
-
+    if(currentView === "day"){
+      this.updateInputDate();
+    }
   },
 
   render: function() {
@@ -117,20 +145,11 @@ Polymer({
     this.$.loadingAnim.style.display = "none";
   },
 
-  canFireEvent: false,
-
   _updateNowDate: function() {
     var now = this.date ? moment(this.date, this.format) : moment();
     if (!now.isValid()) { return; }
     this.now = now;
     this.updateDate();
-  },
-
-  updateInputDate: function() {
-  if(this.canFireEvent) {
-    this.canFireEvent = false;
-    this.fire("date-selected", new moment(this.item, "DD-MM-YYYY"));
-  }
   },
 
   setNowDate: function() {
