@@ -106,8 +106,10 @@ Polymer({
             arr.splice(index, 1);
           }
         };
-    localforage.getItem("mark")
+    localforage.getItem("MarkYourDayLocalDB")
         .then(function(data){
+          var id= this.$.id;
+          console.log(id);
           if(!data){
             var data = {};
             data[year] = {};
@@ -241,6 +243,5 @@ Polymer({
           cl: 'active'
         });
       });
-  },
-
+  }
 });

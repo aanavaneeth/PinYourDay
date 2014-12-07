@@ -8,17 +8,24 @@
         appMenu = document.getElementById("appmenu"),
         buttons = Array.prototype.slice.call(buttonsList,0);
     appMenu.addEventListener("click", function(evt){
-        console.log(evt.target.nodeName);
             if((!!evt.target) && (evt.target.nodeName.toLowerCase() === "paper-button")){
                 document.getElementById("scaff").shadowRoot
                             .getElementsByTagName("core-drawer-panel")[0].setAttribute("selected", "main");
-                        var id = evt.target.getAttribute("id");
-                console.log(id);
+                        var id = evt.target.getAttribute("id").match(/(\d+)/)[0];
+                var currentHighlight = document.querySelector("core-item[active]");
+                if(!!currentHighlight) {
+                    setTimeout(function(){ //need to look into this!
+                        currentHighlight.removeAttribute("active");
+                        currentHighlight.classList.remove("core-selected");
+                    }, 0);
+                }
+                evt.target.parentNode.setAttribute("active","");
+                evt.target.parentNode.classList.add("core-selected");
                         Array.prototype.slice.call(document.querySelectorAll("#calendarPanel div:not([data-menuassociation='"+ id+"'])"),0)
                             .forEach(function(node){
                                 node.style.display = "none";
                             });
-                        document.querySelector("core-scaffold div[data-menuassociation='"+ id+"']").style.display = "block";
+                        document.querySelector("#calendarPanel div[data-menuassociation='"+ id+"']").style.display = "block";
             }
     }, false);
 
@@ -48,12 +55,13 @@
                     return localforage.setItem("MarkYourDayLocalDB", localDb);
                 }, function(err){
                 }).then(function(){
-                    appMenu.innerHTML += ("<core-item> <paper-button id='"+ id +"'  class='blue-ripple'>"+eventvalue.value
+                    appMenu.innerHTML += ("<core-item> <paper-button id='btn"+ id +"'  class='blue-ripple'>"+eventvalue.value
                     +"</paper-button></core-item>");
                     document.querySelector("#calendarPanel").innerHTML += ("<div data-menuassociation = '"+ id
-                    +"' style='display:none;'><responsive-calendar></responsive-calendar></div>");
+                    +"'><responsive-calendar id='cal"+id+"'></responsive-calendar></div>");
                     eventvalue.value = "";
                     overlay.close();
+                    document.getElementById("btn"+id).click();
                 });
         }
     }, false);
