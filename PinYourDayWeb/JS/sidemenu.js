@@ -50,7 +50,7 @@
                         localDb.version = "0.0.1";
                         localDb.events = [];
                     }
-                    id = localDb.events.length+ 1;
+                    id = localDb.events.length;
                     localDb.events.push({});
                     return localforage.setItem("MarkYourDayLocalDB", localDb);
                 }, function(err){

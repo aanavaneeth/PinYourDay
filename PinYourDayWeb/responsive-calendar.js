@@ -98,6 +98,7 @@ Polymer({
         year =  momentObj.format('YYYY').toString(),
         month = momentObj.format('MMMM').toString(),
         day = momentObj.format('D'),
+        that = this,
         addOrRemove = function (arr, value) {
           var index = arr.indexOf(value);
           if (index === -1) {
@@ -108,23 +109,28 @@ Polymer({
         };
     localforage.getItem("MarkYourDayLocalDB")
         .then(function(data){
-          var id= this.$.id;
-          console.log(id);
-          if(!data){
+          var id= parseInt(that.id.replace( /^\D+/g, ''), 10);
+          if(!data) {
             var data = {};
-            data[year] = {};
-            data[year][month] = [day];
-            return localforage.setItem("mark", data);
+            data.version = "0.0.1";
+            data.events = [];
           }
-          if(!data[year]){
-            data[year] = {}
+          if(!data.events[id]){
+            data.events[id] ={};
+            data.events[id] [year] = {};
+            data.events[id] [year][month] = [day];
+            return localforage.setItem("MarkYourDayLocalDB", data);
           }
-          if( !data[year][month]){
-            data[year][month] = [];
+          if(!data.events[id] [year]){
+            data.events[id] [year] = {}
           }
-          addOrRemove(data[year][month],day);
-          return localforage.setItem("mark", data);
+          if( !data.events[id] [year][month]){
+            data.events[id][year][month] = [];
+          }
+          addOrRemove(data.events[id][year][month],day);
+          return localforage.setItem("MarkYourDayLocalDB", data);
         }, function(err){
+          console.log(err);
         });
     this.fire("date-selected", momentObj);
   },
