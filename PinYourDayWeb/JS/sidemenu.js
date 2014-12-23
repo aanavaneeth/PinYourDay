@@ -1,7 +1,7 @@
 /**
  * Created by Navaneeth on 16/11/2014.
  */
-(function(){
+var bootstrap = function(){
 
     //Add events to menu items
     var buttonsList = document.querySelectorAll("core-item paper-button"),
@@ -66,7 +66,6 @@
         }
     }, false);
 
-
     //Add events to calendars
    var calendarList =  document.getElementsByTagName("responsive-calendar");
     Array.prototype.slice.call(calendarList, 0).forEach(function (calendar) {
@@ -75,4 +74,7 @@
             console.log(momentObj.format("DD-MM-YYYY"));
         });
     });
-})();
+};
+
+window.addEventListener("DOMContentLoaded", bootstrap);
+
