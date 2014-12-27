@@ -117,17 +117,17 @@ Polymer({
           }
           if(!data.events[id]){
             data.events[id] ={};
-            data.events[id] [year] = {};
-            data.events[id] [year][month] = [day];
+            data.events[id]["value"] [year] = {};
+            data.events[id]["value"] [year][month] = [day];
             return localforage.setItem("MarkYourDayLocalDB", data);
           }
-          if(!data.events[id] [year]){
-            data.events[id] [year] = {}
+          if(!data.events[id]["value"] [year]){
+            data.events[id]["value"] [year] = {}
           }
-          if( !data.events[id] [year][month]){
-            data.events[id][year][month] = [];
+          if( !data.events[id]["value"] [year][month]){
+            data.events[id]["value"][year][month] = [];
           }
-          addOrRemove(data.events[id][year][month],day);
+          addOrRemove(data.events[id]["value"][year][month],day);
           return localforage.setItem("MarkYourDayLocalDB", data);
         }, function(err){
           console.log(err);
