@@ -195,16 +195,16 @@ Polymer({
     var start = this.now.clone().startOf('month').day(0),
       end = this.now.clone().endOf('month').day(6),
       items = this.items = this.getDayNames(),
-      month = this.now.month(), data, selection = [], that =  this;
+      month = this.now.month(), data, selection = [], that =  this, id= parseInt(that.id.replace( /^\D+/g, ''), 10);
       this.selectionList = [];
       this.type = 'days';
-    localforage.getItem("mark").then(function(markData){
+    localforage.getItem("MarkYourDayLocalDB").then(function(markData){
       data = markData;
       moment()
           .range(start, end)
           .by('days', function(moment) {
             var cls =  moment.month() === month ? 'active': 'fade';
-            if(!!data && data[moment.year()] && data[moment.year()][moment.format('MMMM')] && (data[moment.year()][moment.format('MMMM')].indexOf(moment.format('D'))) !== -1) {
+            if(!!data && data["events"] && data["events"][id] && data["events"][id]["value"] && data["events"][id]["value"][moment.year()] && data["events"][id]["value"][moment.year()][moment.format('MMMM')] && (data["events"][id]["value"][moment.year()][moment.format('MMMM')].indexOf(moment.format('D'))) !== -1) {
               selection.push( moment.format('D')+"-" + moment.format('MM')+ "-"+moment.format('YYYY'));
             }
             items.push({
